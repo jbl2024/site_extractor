@@ -9,6 +9,7 @@ Extract metadata from URL
   - title
   - content
 - main image
+- thumbnail
 - colors (ColorThief)
   - main color
   - color palette
