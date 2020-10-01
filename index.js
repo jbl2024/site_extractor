@@ -2,16 +2,18 @@ const fs = require("fs");
 const { exit } = require("process");
 const yargs = require('yargs');
 const extractor = require("./extractor")
+const server = require("./server");
+
 // import extractor from "./extractor/index.js";
 function serve() {
   console.log("serve")
 }
 
 const argv = yargs.options({
-  host: {
+  hostname: {
     alias: 'h',
     default: "localhost",
-    description: 'host'
+    description: 'hostname'
   },
   port: {
     alias: 'p',
@@ -43,4 +45,7 @@ if (argv.url) {
     console.error(error);
     exit();
   });
+}
+if (!argv.url) {
+  server.start(argv.port, argv.hostname);
 }
