@@ -15,15 +15,15 @@ async function main(url) {
   const browser = await puppeteer.launch({ headless: true });
   const page = await browser.newPage();
   page.setDefaultNavigationTimeout(15000);
-
+  let screenshotAndColors = null;
   try {
     await page.goto(url, { waitUntil: "load" });
+    await load.waitTillHTMLRendered(page);
+    await page.setViewport({ width: 1280, height: 1024 });
+    screenshotAndColors = await load.takeScreenshotAndGetColors(page);
   } catch (e) {
-    console.error(e);
+    throw(e);
   }
-  await load.waitTillHTMLRendered(page);
-  await page.setViewport({ width: 1280, height: 1024 });
-  const screenshotAndColors = await load.takeScreenshotAndGetColors(page);
 
   const canonicalUrl = await page.evaluate(() => {
     const canonicalLink = document.querySelector("link[rel=canonical]");
@@ -73,7 +73,6 @@ async function main(url) {
     canonicalUrl,
     article: resultArticle,
     imageUrl,
-    colors: colors,
     screenshot: screenshotAndColors
   };
 

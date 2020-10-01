@@ -1,4 +1,5 @@
 const fs = require("fs");
+const { exit } = require("process");
 const yargs = require('yargs');
 const extractor = require("./extractor")
 // import extractor from "./extractor/index.js";
@@ -36,6 +37,10 @@ if (argv.url) {
       fs.writeFileSync(argv.output, JSON.stringify(res));
     } else {
       console.log(res);
+      exit();
     }
+  }).catch((error) => {
+    console.error(error);
+    exit();
   });
 }

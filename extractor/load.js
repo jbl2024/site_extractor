@@ -1,4 +1,5 @@
 const fs = require("fs");
+const os = require("os");
 const path = require("path");
 const colorsDetection = require("./colors.js");
 
@@ -26,16 +27,21 @@ exports.waitTillHTMLRendered = async (page, timeout = 30000) => {
 };
 
 exports.takeScreenshotAndGetColors = async (page) => {
-  const directory = fs.mkdtempSync("extractor");
+  const directory = fs.mkdtempSync(path.join(os.tmpdir(), 'extractor-'));
   const imagePath = path.join(directory, "output.png");
   const filemime = "image/png";
-  await page.screenshot({ fullPage: false, type: "png", path: imagePath });
-  fs.readFileSync(imagePath, { encoding: 'base64' });
-  const colors = await colorsDetection.extractColors(imagePath);
-  fs.rmdirSync(directory, { recursive: true })
+  try {
+    await page.screenshot({ fullPage: false, type: "png", path: imagePath });
+    const data = fs.readFileSync(imagePath, { encoding: 'base64' });
+    const colors = await colorsDetection.extractColors(imagePath);
+    fs.rmdirSync(directory, { recursive: true })
 
-  return {
-    screenshot: `data:${filemime};base64,${data}`,
-    colors: colors
+    return {
+      screenshot: `data:${filemime};base64,${data}`,
+      colors: colors
+    }
+  } catch(error) {
+    console.error(error);
+    return null;
   }
 }
