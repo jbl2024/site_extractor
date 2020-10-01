@@ -1,3 +1,7 @@
+const fs = require("fs");
+const path = require("path");
+const colorsDetection = require("./colors.js");
+
 exports.waitTillHTMLRendered = async (page, timeout = 30000) => {
   const checkDurationMsecs = 1000;
   const maxChecks = timeout / checkDurationMsecs;
@@ -9,16 +13,29 @@ exports.waitTillHTMLRendered = async (page, timeout = 30000) => {
   while (checkCounts++ <= maxChecks) {
     const html = await page.content();
     const currentHTMLSize = html.length;
-    const bodyHTMLSize = await page.evaluate(() => document.body.innerHTML.length);
     if (lastHTMLSize !== 0 && currentHTMLSize === lastHTMLSize) countStableSizeIterations++;
     else countStableSizeIterations = 0; // reset the counter
 
     if (countStableSizeIterations >= minStableSizeIterations) {
-      console.log("Page rendered fully..");
       break;
     }
 
     lastHTMLSize = currentHTMLSize;
-    await page.waitFor(checkDurationMsecs);
+    await page.waitForTimeout(checkDurationMsecs);
   }
 };
+
+exports.takeScreenshotAndGetColors = async (page) => {
+  const directory = fs.mkdtempSync("extractor");
+  const imagePath = path.join(directory, "output.png");
+  const filemime = "image/png";
+  await page.screenshot({ fullPage: false, type: "png", path: imagePath });
+  fs.readFileSync(imagePath, { encoding: 'base64' });
+  const colors = await colorsDetection.extractColors(imagePath);
+  fs.rmdirSync(directory, { recursive: true })
+
+  return {
+    screenshot: `data:${filemime};base64,${data}`,
+    colors: colors
+  }
+}

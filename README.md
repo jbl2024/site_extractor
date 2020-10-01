@@ -2,6 +2,18 @@
 
 Extract metadata from URL
 
+## Features extracted
+
+- canonical url
+- article (@mozilla/readability):
+  - title
+  - content
+- main image
+- colors (ColorThief)
+  - main color
+  - color palette
+- screenshot
+
 ## Installation
 
 ```
@@ -21,7 +33,12 @@ $ node index.js --url https://www.w3.org/ --output /tmp/output.json
 $ node index.js --port 9001 --host localhost
 ```
 
-## Metadata
+## Example
+
+```
+$ node index.js --url https://www.w3.org/ --output /tmp/output.json
+```
+
 ```
 {
   canonicalUrl: 'https://www.w3.org/',

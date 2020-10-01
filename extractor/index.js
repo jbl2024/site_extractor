@@ -2,7 +2,6 @@
 const puppeteer = require("puppeteer");
 const fs = require("fs");
 const load = require("./load.js");
-const colorsDetection = require("./colors.js");
 
 const readabilityJsStr = fs.readFileSync("node_modules/@mozilla/readability/Readability.js", {
   encoding: "utf-8",
@@ -24,8 +23,7 @@ async function main(url) {
   }
   await load.waitTillHTMLRendered(page);
   await page.setViewport({ width: 1280, height: 1024 });
-  await page.screenshot({ fullPage: false, type: "png", path: "/tmp/buddy-screenshot.png" });
-  const colors = await colorsDetection.extractColors("/tmp/buddy-screenshot.png");
+  const screenshotAndColors = await load.takeScreenshotAndGetColors(page);
 
   const canonicalUrl = await page.evaluate(() => {
     const canonicalLink = document.querySelector("link[rel=canonical]");
@@ -75,7 +73,8 @@ async function main(url) {
     canonicalUrl,
     article: resultArticle,
     imageUrl,
-    colors: colors
+    colors: colors,
+    screenshot: screenshotAndColors
   };
 
   return metadata;
