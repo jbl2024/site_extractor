@@ -1,4 +1,4 @@
-export const waitTillHTMLRendered = async (page, timeout = 30000) => {
+exports.waitTillHTMLRendered = async (page, timeout = 30000) => {
   const checkDurationMsecs = 1000;
   const maxChecks = timeout / checkDurationMsecs;
   let lastHTMLSize = 0;
@@ -9,18 +9,7 @@ export const waitTillHTMLRendered = async (page, timeout = 30000) => {
   while (checkCounts++ <= maxChecks) {
     const html = await page.content();
     const currentHTMLSize = html.length;
-
     const bodyHTMLSize = await page.evaluate(() => document.body.innerHTML.length);
-
-    console.log(
-      "last: ",
-      lastHTMLSize,
-      " <> curr: ",
-      currentHTMLSize,
-      " body html size: ",
-      bodyHTMLSize
-    );
-
     if (lastHTMLSize !== 0 && currentHTMLSize === lastHTMLSize) countStableSizeIterations++;
     else countStableSizeIterations = 0; // reset the counter
 
