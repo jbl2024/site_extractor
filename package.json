@@ -2,7 +2,8 @@
   "name": "site_extractor",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "type": "module",
+  "private": true,
   "scripts": {
     "start_dev": "nodemon index.js"
   },
@@ -11,9 +12,11 @@
   "license": "ISC",
   "dependencies": {
     "@mozilla/readability": "^0.3.0",
+    "colorthief": "^2.3.2",
     "puppeteer": "^5.3.1"
   },
   "devDependencies": {
-    "nodemon": "^2.0.4"
+    "nodemon": "^2.0.4",
+    "prettier": "^2.1.2"
   }
 }
