@@ -38,7 +38,7 @@ if (argv.url) {
     if (argv.output) {
       fs.writeFileSync(argv.output, JSON.stringify(res));
     } else {
-      console.log(res);
+      console.log(JSON.stringify(res));
       exit();
     }
   }).catch((error) => {

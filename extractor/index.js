@@ -2,7 +2,7 @@
 const puppeteer = require("puppeteer");
 const fs = require("fs");
 const load = require("./load.js");
-
+const autotag = require("./autotag.js");
 const readabilityJsStr = fs.readFileSync("node_modules/@mozilla/readability/Readability.js", {
   encoding: "utf-8",
 });
@@ -69,10 +69,13 @@ async function main(url) {
 
   browser.close();
 
+  const keywords = await autotag.process(resultArticle.textContent);
+
   const metadata = {
     canonicalUrl,
     article: resultArticle,
     imageUrl,
+    keywords: keywords,
     screenshot: screenshotAndColors
   };
 

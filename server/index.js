@@ -10,8 +10,19 @@ exports.start = function (port, hostname) {
   app.use(bodyParser.json());  
 
   app.get('/', (req, res) => {
-    res.send('OK')
+    const query = req.query;
+    if (query.url) {
+      extractor.extract(query.url).then((output) => {
+        res.send(output);
+      }).catch((error) => {
+        console.log(error)
+        res.sendStatus(500);
+      });
+    } else {
+      res.send('OK')
+    }
   })
+
 
   app.post('/', (req, res) => {
     const url = req.body.url;

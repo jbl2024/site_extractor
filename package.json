@@ -15,8 +15,15 @@
     "colorthief": "^2.3.2",
     "express": "^4.17.1",
     "image-thumbnail": "^1.0.11",
+    "install": "^0.13.0",
     "morgan": "^1.10.0",
+    "nlcst-to-string": "^2.0.4",
+    "npm": "^6.14.8",
     "puppeteer": "^5.3.1",
+    "retext": "^7.0.1",
+    "retext-keywords": "^6.0.0",
+    "retext-pos": "^3.0.0",
+    "to-vfile": "^6.1.0",
     "yargs": "^16.0.3"
   },
   "devDependencies": {
