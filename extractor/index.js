@@ -12,12 +12,20 @@ function executor() {
 }
 
 async function main(url) {
-  const browser = await puppeteer.launch({ args: ['--no-sandbox', '--disable-setuid-sandbox'], headless: true,  });
+  const startDate = new Date;
+  console.log("start")
+  const args = [
+    '--no-sandbox', 
+    '--disable-setuid-sandbox',
+    '--proxy - server="direct://"',
+    '--proxy-bypass-list=*'
+  ]
+  const browser = await puppeteer.launch({ args: args, headless: true,  });
   const page = await browser.newPage();
   page.setDefaultNavigationTimeout(15000);
   let screenshotAndColors = null;
   try {
-    await page.goto(url, { waitUntil: "load" });
+    await page.goto(url, { waitUntil: "domcontentloaded" });
     await load.waitTillHTMLRendered(page);
     await page.setViewport({ width: 1280, height: 1024 });
     screenshotAndColors = await load.takeScreenshotAndGetColors(page);
@@ -79,6 +87,9 @@ async function main(url) {
     screenshot: screenshotAndColors
   };
 
+  const endDate = new Date()
+  const duration = endDate - startDate;
+  console.log(`end : ${duration}ms`);
   return metadata;
 }
 

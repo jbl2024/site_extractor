@@ -5,12 +5,12 @@ const imageThumbnail = require('image-thumbnail');
 const colorsDetection = require("./colors.js");
 
 exports.waitTillHTMLRendered = async (page, timeout = 30000) => {
-  const checkDurationMsecs = 1000;
+  const checkDurationMsecs = 500;
   const maxChecks = timeout / checkDurationMsecs;
   let lastHTMLSize = 0;
   let checkCounts = 1;
   let countStableSizeIterations = 0;
-  const minStableSizeIterations = 3;
+  const minStableSizeIterations = 2;
 
   while (checkCounts++ <= maxChecks) {
     const html = await page.content();
